@@ -11,24 +11,28 @@
 
   <p>원룸샵</p>
   <div v-for="(name, i) in oneRooms" :key="i">
-    <img class="room-img" :src="getImgUrl(i)" @click="clickImg()"/>
+    <img class="room-img" :src="getImgUrl(i)" @click="clickImg()" />
     <h4 :style="스타일">{{ name }}</h4>
-    <p>{{ (i + 1) * 1000 }} 만원</p>
-    <p>{{isOpenedModalPage}}</p>
+    <p>{{ products[i].title }}</p>
+    <p>{{ products[i].content }}</p>
+    <p>{{ products[i].price }}</p>
     <button @click="increase(i)">혀위매물신고</button>
     <span> 신고수 : {{ 신고수[i] }} </span>
   </div>
 </template>
 
 <script>
+import products from "./assets/data.js";
+
 export default {
   name: "App",
   data() {
     return {
-      isOpenedModalPage : false,
+      isOpenedModalPage: false,
       신고수: [0, 0, 0],
       메뉴들: ["Home", "Shop", "About"],
       oneRooms: ["역삼동원룸", "천호동원룸", "마포구원룸"],
+      products,
     };
   },
   methods: {
@@ -39,13 +43,13 @@ export default {
       let url = require("./assets/room".concat(String(i)).concat(".jpg"));
       return url;
     },
-    clickImg(){
-      if(this.isOpenedModalPage){
+    clickImg() {
+      if (this.isOpenedModalPage) {
         this.isOpenedModalPage = false;
-      }else{
+      } else {
         this.isOpenedModalPage = true;
       }
-    }
+    },
   },
 
   components: {},
@@ -72,11 +76,11 @@ export default {
   padding: 10px;
 }
 
-body{
+body {
   margin: 0;
 }
 
-div{
+div {
   box-sizing: border-box;
 }
 
@@ -86,13 +90,16 @@ div{
 }
 
 .black-bg {
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  position: fixed; padding: 20px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  padding: 20px;
 }
 .white-bg {
   background: wheat;
-  width :100%; border-radius: 8px;
+  width: 100%;
+  border-radius: 8px;
   padding: 20px;
 }
 </style>
