@@ -1,105 +1,57 @@
 <template>
-  <div class="black-bg" v-if="isOpenedModalPage" @click="clickImg()">
-    <div class="white-bg">
-      <h4>상세페이지</h4>
-      <p>상세페이지 내용임</p>
-    </div>
-  </div>
-  <div class="menu">
-    <a v-for="a in 메뉴들" :key="a">{{ a }}</a>
-  </div>
-
-  <p>원룸샵</p>
-  <div v-for="(name, i) in oneRooms" :key="i">
-    <img class="room-img" :src="getImgUrl(i)" @click="clickImg()" />
-    <h4 :style="스타일">{{ name }}</h4>
-    <p>{{ products[i].title }}</p>
-    <p>{{ products[i].content }}</p>
-    <p>{{ products[i].price }}</p>
-    <button @click="increase(i)">혀위매물신고</button>
-    <span> 신고수 : {{ 신고수[i] }} </span>
+  <div class="container">
+    <ol class="list-group list-group-numbered">
+      <li v-for="grammar in data.grammars" v-bind:key="grammar" class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">{{ grammar.word }}</div>
+          {{ grammar.meaning }}
+        </div>
+        <span class="badge bg-primary rounded-pill">14</span>
+      </li>
+      <li v-if="data.grammars.length == 0" class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">게시물이 없습니다</div>
+          <span>저장된 게시물이 없습니다.</span>
+        </div>
+        <span class="badge bg-primary rounded-pill">0</span>
+      </li>
+    </ol>
   </div>
 </template>
 
 <script>
-import products from "./assets/data.js";
+import { reactive, onMounted } from "vue";
 
 export default {
   name: "App",
-  data() {
+  methods: {},
+  components: {},
+
+  setup() {
+    const data = reactive({
+      grammars: [],
+    });
+    // 게시판 API를 호출해서 전달
+    const getList = () => {
+      fetch("http://localhost:9000/api/grammars")
+        .then((response) => response.json())
+        .then((response) => {
+          data.grammars = response;
+        });
+    };
+
+    onMounted(() => {
+      getList();
+      console.log(getList);
+    });
     return {
-      isOpenedModalPage: false,
-      신고수: [0, 0, 0],
-      메뉴들: ["Home", "Shop", "About"],
-      oneRooms: ["역삼동원룸", "천호동원룸", "마포구원룸"],
-      products,
+      data: data,
+      getList: getList,
     };
   },
-  methods: {
-    increase(i) {
-      this.신고수[i] += 1;
-    },
-    getImgUrl(i) {
-      let url = require("./assets/room".concat(String(i)).concat(".jpg"));
-      return url;
-    },
-    clickImg() {
-      if (this.isOpenedModalPage) {
-        this.isOpenedModalPage = false;
-      } else {
-        this.isOpenedModalPage = true;
-      }
-    },
-  },
-
-  components: {},
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-.menu {
-  background: darkslateblue;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-.menu a {
-  color: white;
-  padding: 10px;
-}
-
-body {
-  margin: 0;
-}
-
-div {
-  box-sizing: border-box;
-}
-
-.room-img {
-  width: 100%;
-  margin-top: 40px;
-}
-
-.black-bg {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  padding: 20px;
-}
-.white-bg {
-  background: wheat;
-  width: 100%;
-  border-radius: 8px;
-  padding: 20px;
-}
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css";
 </style>
