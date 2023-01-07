@@ -16,6 +16,10 @@
         <span class="badge bg-primary rounded-pill">0</span>
       </li>
     </ol>
+
+    <hr />
+
+    <custom-form />
   </div>
 </template>
 
@@ -23,7 +27,7 @@
 import { reactive, onMounted } from "vue";
 
 export default {
-  name: "App",
+  name: "app",
   methods: {},
   components: {},
 
